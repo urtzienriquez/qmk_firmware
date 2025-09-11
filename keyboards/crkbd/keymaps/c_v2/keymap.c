@@ -20,16 +20,7 @@ enum custom_keycodes {
     I_ACUTE,
     O_ACUTE,
     U_ACUTE,
-    CTRL_LOCK,
-    ALT_LOCK,
-    SHIFT_LOCK,
-    GUI_LOCK
 };
-
-bool ctrl_locked = false;
-bool alt_locked = false;
-bool gui_locked = false;
-bool shift_locked = false;
 
 // Spanish/unicode combos
 const uint16_t PROGMEM caps_combo[]   = {KC_J, KC_F, COMBO_END};
@@ -53,38 +44,6 @@ combo_t key_combos[] = {
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-
-    // --- ESC clears locked mods but only sends ESC if no mods are locked ---
-    if (keycode == KC_ESC && record->event.pressed) {
-        if (ctrl_locked || alt_locked || shift_locked || gui_locked) {
-            ctrl_locked = false;
-            alt_locked = false;
-            shift_locked = false;
-            gui_locked = false;
-            clear_mods();
-            send_keyboard_report();
-            return false;  // Don't send Escape to host
-        }
-        return true; // send Escape normally if no locks
-    }
-
-    // --- Toggle locked modifiers ---
-    if (record->event.pressed) {
-        switch (keycode) {
-            case CTRL_LOCK:  ctrl_locked = !ctrl_locked; return false;
-            case ALT_LOCK:   alt_locked = !alt_locked; return false;
-            case SHIFT_LOCK: shift_locked = !shift_locked; return false;
-            case GUI_LOCK:   gui_locked = !gui_locked; return false;
-        }
-    }
-
-    // --- Apply locked modifiers globally ---
-    uint8_t mods = get_mods();
-    if (ctrl_locked)  mods |= MOD_BIT(KC_LCTL);
-    if (alt_locked)   mods |= MOD_BIT(KC_LALT);
-    if (shift_locked) mods |= MOD_BIT(KC_LSFT);
-    if (gui_locked)   mods |= MOD_BIT(KC_LGUI);
-    set_mods(mods);
 
     // --- Spanish/unicode keys ---
     if (record->event.pressed) {
@@ -137,8 +96,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     [1] = LAYOUT_split_3x6_3(
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        // XXXXXXX, OSM(MOD_LSFT), OSM(MOD_LCTL), OSM(MOD_LGUI), OSM(MOD_LALT), XXXXXXX,   XXXXXXX, ALT_LOCK, GUI_LOCK, CTRL_LOCK, SHIFT_LOCK, XXXXXXX,
-        XXXXXXX, KC_LSFT, KC_LCTL, KC_LGUI, KC_LALT, XXXXXXX,   XXXXXXX, ALT_LOCK, GUI_LOCK, CTRL_LOCK, SHIFT_LOCK, XXXXXXX,
+        XXXXXXX, KC_LSFT, KC_LCTL, KC_LGUI, KC_LALT, XXXXXXX,   XXXXXXX, KC_LALT, KC_LGUI, KC_LCTL, KC_LSFT, XXXXXXX,
         XXXXXXX, XXXXXXX, LCS(KC_X), LCS(KC_C), LCS(KC_V), XXXXXXX,                KC_LEFT, KC_DOWN, KC_UP, KC_RGHT, XXXXXXX, XXXXXXX,
                                          XXXXXXX, TO(0), KC_ENT,   KC_SPC, XXXXXXX, XXXXXXX
     ),
