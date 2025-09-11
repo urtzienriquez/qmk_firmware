@@ -1,0 +1,270 @@
+/*
+Copyright 2019 @foostan
+Copyright 2020 Drashna Jaelre <@drashna>
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 of the License, or
+(at your option) any later version.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+*/
+
+#include QMK_KEYBOARD_H
+
+enum custom_keycodes {
+    NTILDE = SAFE_RANGE,
+    A_ACUTE,
+    E_ACUTE,
+    I_ACUTE,
+    O_ACUTE,
+    U_ACUTE,
+    CTRL_LOCK,
+    ALT_LOCK,
+    SHIFT_LOCK,
+    GUI_LOCK
+};
+
+bool ctrl_locked = false;
+bool alt_locked = false;
+bool gui_locked = false;
+bool shift_locked = false;
+
+// Spanish/unicode combos
+const uint16_t PROGMEM caps_combo[]   = {KC_J, KC_F, COMBO_END};
+const uint16_t PROGMEM esc_combo[]    = {KC_J, KC_K, COMBO_END};
+const uint16_t PROGMEM ntilde_combo[] = {KC_N, KC_M, COMBO_END};
+const uint16_t PROGMEM acute_a_combo[] = {KC_A, KC_S, COMBO_END};
+const uint16_t PROGMEM acute_e_combo[] = {KC_E, KC_R, COMBO_END};
+const uint16_t PROGMEM acute_i_combo[] = {KC_I, KC_O, COMBO_END};
+const uint16_t PROGMEM acute_o_combo[] = {KC_O, KC_P, COMBO_END};
+const uint16_t PROGMEM acute_u_combo[] = {KC_U, KC_I, COMBO_END};
+
+combo_t key_combos[] = {
+    COMBO(caps_combo, KC_CAPS),
+    COMBO(esc_combo, KC_ESC),
+    COMBO(ntilde_combo, NTILDE),
+    COMBO(acute_a_combo, A_ACUTE),
+    COMBO(acute_e_combo, E_ACUTE),
+    COMBO(acute_i_combo, I_ACUTE),
+    COMBO(acute_o_combo, O_ACUTE),
+    COMBO(acute_u_combo, U_ACUTE),
+};
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+
+    // --- ESC clears locked mods but only sends ESC if no mods are locked ---
+    if (keycode == KC_ESC && record->event.pressed) {
+        if (ctrl_locked || alt_locked || shift_locked || gui_locked) {
+            ctrl_locked = false;
+            alt_locked = false;
+            shift_locked = false;
+            gui_locked = false;
+            clear_mods();
+            send_keyboard_report();
+            return false;  // Don't send Escape to host
+        }
+        return true; // send Escape normally if no locks
+    }
+
+    // --- Toggle locked modifiers ---
+    if (record->event.pressed) {
+        switch (keycode) {
+            case CTRL_LOCK:  ctrl_locked = !ctrl_locked; return false;
+            case ALT_LOCK:   alt_locked = !alt_locked; return false;
+            case SHIFT_LOCK: shift_locked = !shift_locked; return false;
+            case GUI_LOCK:   gui_locked = !gui_locked; return false;
+        }
+    }
+
+    // --- Apply locked modifiers globally ---
+    uint8_t mods = get_mods();
+    if (ctrl_locked)  mods |= MOD_BIT(KC_LCTL);
+    if (alt_locked)   mods |= MOD_BIT(KC_LALT);
+    if (shift_locked) mods |= MOD_BIT(KC_LSFT);
+    if (gui_locked)   mods |= MOD_BIT(KC_LGUI);
+    set_mods(mods);
+
+    // --- Spanish/unicode keys ---
+    if (record->event.pressed) {
+        bool is_shift = keyboard_report->mods & MOD_MASK_SHIFT;
+        bool is_caps  = host_keyboard_led_state().caps_lock;
+        bool uppercase = is_shift ^ is_caps;
+
+        switch (keycode) {
+            case NTILDE: send_unicode_string(uppercase ? "Ñ" : "ñ"); return false;
+            case A_ACUTE: send_unicode_string(uppercase ? "Á" : "á"); return false;
+            case E_ACUTE: send_unicode_string(uppercase ? "É" : "é"); return false;
+            case I_ACUTE: send_unicode_string(uppercase ? "Í" : "í"); return false;
+            case O_ACUTE: send_unicode_string(uppercase ? "Ó" : "ó"); return false;
+            case U_ACUTE: send_unicode_string(uppercase ? "Ú" : "ú"); return false;
+        }
+    }
+
+    return true;
+}
+
+void keyboard_post_init_user(void) {
+    unicode_config.input_mode = UNICODE_MODE_LINUX;
+    #ifdef RGB_MATRIX_ENABLE
+    rgb_matrix_enable();
+    rgb_matrix_mode(RGB_MATRIX_SOLID_COLOR);
+    #endif
+}
+
+// --- RGB layer indicator ---
+layer_state_t layer_state_set_user(layer_state_t state) {
+    #ifdef RGB_MATRIX_ENABLE
+    switch (get_highest_layer(state)) {
+        case 0: rgb_matrix_sethsv_noeeprom(HSV_BLUE); break;
+        case 1: rgb_matrix_sethsv_noeeprom(HSV_GREEN); break;
+        case 2: rgb_matrix_sethsv_noeeprom(HSV_PURPLE); break;
+        case 3: rgb_matrix_sethsv_noeeprom(HSV_YELLOW); break;
+        default: rgb_matrix_sethsv_noeeprom(HSV_RED); break;
+    }
+    #endif
+    return state;
+}
+
+// --- Keymaps ---
+const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
+    [0] = LAYOUT_split_3x6_3(
+        KC_TAB, KC_Q, KC_W, KC_E, KC_R, KC_T,           KC_Y, KC_U, KC_I, KC_O, KC_P, KC_BSPC,
+        OSM(MOD_LCTL), KC_A, KC_S, KC_D, KC_F, KC_G,   KC_H, KC_J, KC_K, KC_L, KC_SCLN, OSM(MOD_LALT),
+        OSM(MOD_LSFT), KC_Z, KC_X, KC_C, KC_V, KC_B,   KC_N, KC_M, KC_COMM, KC_DOT, KC_SLSH, KC_QUOT,
+                                      MO(1), OSL(2), KC_ENT,   KC_SPC, OSL(3), OSL(4)
+    ),
+    [1] = LAYOUT_split_3x6_3(
+        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+        XXXXXXX, OSM(MOD_LSFT), OSM(MOD_LCTL), OSM(MOD_LGUI), OSM(MOD_LALT), XXXXXXX,   XXXXXXX, ALT_LOCK, GUI_LOCK, CTRL_LOCK, SHIFT_LOCK, XXXXXXX,
+        XXXXXXX, XXXXXXX, LCS(KC_X), LCS(KC_C), LCS(KC_V), XXXXXXX,                KC_LEFT, KC_DOWN, KC_UP, KC_RGHT, XXXXXXX, XXXXXXX,
+                                         XXXXXXX, TO(0), KC_ENT,   KC_SPC, XXXXXXX, XXXXXXX
+    ),
+    [2] = LAYOUT_split_3x6_3(
+        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,   KC_EQUAL, KC_7, KC_8, KC_9, KC_ASTR, XXXXXXX,
+        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,   KC_MINS, KC_4, KC_5, KC_6, KC_SLSH, OSM(MOD_LALT),
+        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,   KC_PLUS, KC_1, KC_2, KC_3, KC_DOT, XXXXXXX,
+                                         XXXXXXX, TO(0), KC_ENT,   KC_SPC, TO(3), KC_0
+    ),
+    [3] = LAYOUT_split_3x6_3(
+        KC_TAB, KC_EXLM, KC_AT, KC_HASH, KC_PIPE, KC_AMPR,       KC_EQUAL, KC_LBRC, KC_RBRC, KC_PERC, KC_ASTR, KC_BSPC,
+        KC_LCTL, XXXXXXX, XXXXXXX, KC_TILD, KC_SLSH, KC_DQUO,     KC_UNDS, KC_LPRN, KC_RPRN, KC_DLR, KC_BSLS, OSM(MOD_LALT),
+        KC_LSFT, KC_CIRC, KC_LT, KC_GT, KC_QUOT, KC_MINS,         KC_PLUS, KC_LCBR, KC_RCBR, KC_QUES, KC_COLN, KC_GRV,
+                                         XXXXXXX, TO(0), KC_ENT,   KC_SPC, TO(2), XXXXXXX
+    ),
+    [4] = LAYOUT_split_3x6_3(
+        QK_BOOT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,     KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6,
+        RM_TOGG, RM_HUEU, RM_SATU, RM_VALU, XXXXXXX, XXXXXXX,     KC_F7, KC_F8, KC_F9, KC_F10, KC_F11, KC_F12,
+        RM_NEXT, RM_HUED, RM_SATD, RM_VALD, XXXXXXX, XXXXXXX,     KC_PSCR, KC_SCRL, KC_PAUS, KC_INS, KC_DEL, XXXXXXX,
+                                         XXXXXXX, TO(0), KC_ENT,   KC_SPC, TO(3), XXXXXXX
+    )
+};
+
+// Encoder map for Corne with 4 encoders (your original configuration)
+#ifdef ENCODER_MAP_ENABLE
+const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
+  [0] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU), ENCODER_CCW_CW(KC_MPRV, KC_MNXT), ENCODER_CCW_CW(RM_VALD, RM_VALU), ENCODER_CCW_CW(KC_RGHT, KC_LEFT), },
+  [1] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU), ENCODER_CCW_CW(KC_MPRV, KC_MNXT), ENCODER_CCW_CW(RM_VALD, RM_VALU), ENCODER_CCW_CW(KC_RGHT, KC_LEFT), },
+  [2] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU), ENCODER_CCW_CW(KC_MPRV, KC_MNXT), ENCODER_CCW_CW(RM_VALD, RM_VALU), ENCODER_CCW_CW(KC_RGHT, KC_LEFT), },
+  [3] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU), ENCODER_CCW_CW(KC_MPRV, KC_MNXT), ENCODER_CCW_CW(RM_VALD, RM_VALU), ENCODER_CCW_CW(KC_RGHT, KC_LEFT), },
+};
+#endif
+
+#ifdef OLED_ENABLE
+oled_rotation_t oled_init_user(oled_rotation_t rotation) {
+    if (is_keyboard_master()) {
+        return OLED_ROTATION_270; // Rotate master 90 degrees for vertical display
+    } else {
+        return OLED_ROTATION_0;  // Rotate slave 90 degrees (opposite direction)
+    }
+}
+
+static void oled_render_vertical_layers(void) {
+    uint8_t current_layer = get_highest_layer(layer_state);
+    oled_write_P(PSTR("LAYER"), false);
+    oled_advance_page(true);
+    oled_advance_page(true);
+    // Layer 0 - Base
+    if (current_layer == 0) {
+        oled_write_P(PSTR(">BASE"), true);  // White background, black text
+    } else {
+        oled_write_P(PSTR(" BASE"), false);
+    }
+    if (current_layer == 1) {
+        oled_write_P(PSTR(">MODS"), true);  // White background, black text
+    } else {
+        oled_write_P(PSTR(" MODS"), false);
+    }
+    // Layer 1 - Numbers/Navigation
+    if (current_layer == 2) {
+        oled_write_P(PSTR(">NUMB"), true);  // White background, black text
+    } else {
+        oled_write_P(PSTR(" NUMB"), false);
+    }
+    // Layer 2 - Symbols
+    if (current_layer == 3) {
+        oled_write_P(PSTR(">SYMB"), true);  // White background, black text
+    } else {
+        oled_write_P(PSTR(" SYMB"), false);
+    }
+    // Layer 3 - Function
+    if (current_layer == 4) {
+        oled_write_P(PSTR(">FUNC"), true);  // White background, black text
+    } else {
+        oled_write_P(PSTR(" FUNC"), false);
+    }
+    oled_advance_page(true);
+}
+
+static void oled_render_mods_status(void) {
+    uint8_t mods = get_mods() | get_oneshot_mods();
+    oled_write_P(PSTR("MODS:"), false);
+    oled_advance_page(true);
+    // Display SCAG format (Shift, Ctrl, Gui, Alt)
+    char mods_str[5] = "----";
+    mods_str[4] = '\0';  // Null terminate the string
+    if (mods & MOD_MASK_SHIFT) {
+        mods_str[0] = 'S';
+    }
+    if (mods & MOD_MASK_CTRL) {
+        mods_str[1] = 'C';
+    }
+    if (mods & MOD_MASK_GUI) {
+        mods_str[2] = 'G';
+    }
+    if (mods & MOD_MASK_ALT) {
+        mods_str[3] = 'A';
+    }
+    oled_write(mods_str, false);
+    oled_advance_page(true);
+    oled_advance_page(true);
+}
+
+static void oled_render_caps_status(void) {
+    bool caps = host_keyboard_led_state().caps_lock;
+    if (caps) {
+        oled_write_P(PSTR("CAPS "), true);  // White background when active
+    } else {
+        oled_write_P(PSTR("caps "), false);
+    }
+    oled_advance_page(true);
+    oled_advance_page(true);
+}
+
+static void oled_render_master_info(void) {
+    oled_render_vertical_layers();
+    oled_render_mods_status();
+    oled_render_caps_status();
+}
+
+bool oled_task_user(void) {
+    if (is_keyboard_master()) {
+        oled_render_master_info();
+        return false;  // We handled the master display
+    } else {
+        return true;   // Let QMK handle the slave display (default implementation)
+    }
+}
+#endif // OLED_ENABLE
+
