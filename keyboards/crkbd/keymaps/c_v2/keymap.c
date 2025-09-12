@@ -20,6 +20,7 @@ enum custom_keycodes {
     I_ACUTE,
     O_ACUTE,
     U_ACUTE,
+    DEGREE,
 };
 
 // Spanish/unicode combos
@@ -62,6 +63,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             case I_ACUTE: send_unicode_string(uppercase ? "Í" : "í"); return false;
             case O_ACUTE: send_unicode_string(uppercase ? "Ó" : "ó"); return false;
             case U_ACUTE: send_unicode_string(uppercase ? "Ú" : "ú"); return false;
+            case DEGREE: send_unicode_string("º"); return false;
         }
     }
 
@@ -126,7 +128,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                XXXXXXX, TO(0), KC_ENT,   KC_SPC, TO(5), XXXXXXX
     ),
     [5] = LAYOUT_split_3x6_3(
-        KC_TAB, XXXXXXX, XXXXXXX, KC_PIPE, KC_AMPR, KC_EXLM,                 KC_EQUAL, KC_LCBR, KC_RCBR, KC_PERC, KC_ASTR, KC_BSPC,
+        KC_TAB, XXXXXXX, DEGREE, KC_PIPE, KC_AMPR, KC_EXLM,                 KC_EQUAL, KC_LCBR, KC_RCBR, KC_PERC, KC_ASTR, KC_BSPC,
         _______, XXXXXXX, KC_AT, KC_TILD, KC_SLSH, KC_HASH,                  KC_UNDS, KC_LPRN, KC_RPRN, KC_DLR, KC_BSLS, _______,
         _______, KC_CIRC, KC_QUOT, KC_LT, KC_GT, KC_MINS,                    KC_PLUS,  KC_LBRC, KC_RBRC, KC_QUES, KC_COLN, KC_GRV,
                                                XXXXXXX, TO(0), KC_ENT,   KC_SPC, TO(4), XXXXXXX
