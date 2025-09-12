@@ -1,6 +1,7 @@
 COMBO_ENABLE = yes
 # TAP_DANCE_ENABLE = yes
 UNICODE_ENABLE = yes
+MOUSEKEY_ENABLE = yes
 OLED_ENABLE = yes
 ENCODER_MAP_ENABLE = yes
 RGB_MATRIX_ENABLE = yes  # if you want RGB lighting

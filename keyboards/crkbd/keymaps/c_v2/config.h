@@ -27,12 +27,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define TAPPING_TERM_PER_KEY  // Allow different tapping terms for different keys
 
 // Combo configuration
-#define COMBO_TERM 30  // Increased from 50ms for more reliable combo detection
+#define COMBO_TERM 50  // Increased from 50ms for more reliable combo detection
 #define COMBO_MUST_HOLD_MODS  // Require holding modifier combos
 #define COMBO_HOLD_TERM 150   // How long to hold combo for it to register
 
 #define ONESHOT_TAP_TOGGLE 2    // Tap twice to lock the modifier
 #define ONESHOT_TIMEOUT 3000    // How long OSM stays active (3 seconds)
+
+// Mouse key speed and acceleration (optional customization)
+#define MOUSEKEY_DELAY 0
+#define MOUSEKEY_INTERVAL 16
+#define MOUSEKEY_WHEEL_DELAY 0
+#define MOUSEKEY_MAX_SPEED 2
+#define MOUSEKEY_TIME_TO_MAX 1
 
 // Tap dance specific settings
 // #define TAP_DANCE_TAPPING_TERM 250  // Same as tapping term for consistency
