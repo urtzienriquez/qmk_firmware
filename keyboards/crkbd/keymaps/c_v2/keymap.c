@@ -26,8 +26,11 @@ enum custom_keycodes {
 // Spanish/unicode combos
 const uint16_t PROGMEM caps_combo[]   = {KC_J, KC_F, COMBO_END};
 const uint16_t PROGMEM esc_combo[]    = {KC_J, KC_K, COMBO_END};
+const uint16_t PROGMEM tab_combo[]    = {KC_D, KC_F, COMBO_END};
 const uint16_t PROGMEM arrows_combo[]    = {KC_ENT, KC_SPC, COMBO_END};
 const uint16_t PROGMEM mouse_combo[]    = {OSL(4), OSL(5), COMBO_END};
+const uint16_t PROGMEM locknum_combo[]    = {OSL(4), KC_SPC, COMBO_END};
+const uint16_t PROGMEM locksym_combo[]    = {OSL(5), KC_ENT, COMBO_END};
 const uint16_t PROGMEM ntilde_combo[] = {KC_N, KC_M, COMBO_END};
 const uint16_t PROGMEM acute_a_combo[] = {KC_A, KC_S, COMBO_END};
 const uint16_t PROGMEM acute_e_combo[] = {KC_E, KC_R, COMBO_END};
@@ -38,8 +41,11 @@ const uint16_t PROGMEM acute_u_combo[] = {KC_U, KC_I, COMBO_END};
 combo_t key_combos[] = {
     COMBO(caps_combo, KC_CAPS),
     COMBO(esc_combo, KC_ESC),
+    COMBO(tab_combo, KC_TAB),
     COMBO(arrows_combo, MO(2)),
     COMBO(mouse_combo, MO(3)),
+    COMBO(locknum_combo, TO(4)),
+    COMBO(locksym_combo, TO(5)),
     COMBO(ntilde_combo, NTILDE),
     COMBO(acute_a_combo, A_ACUTE),
     COMBO(acute_e_combo, E_ACUTE),
@@ -123,14 +129,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     [4] = LAYOUT_split_3x6_3(
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                KC_LBRC, KC_7, KC_8, KC_9, KC_0, KC_RBRC,
-        _______, XXXXXXX, XXXXXXX, XXXXXXX, OSM(MOD_LSFT), XXXXXXX,          KC_MINS, KC_4, KC_5, KC_6, KC_SLSH, _______,
-        _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                KC_EQUAL,  KC_1, KC_2, KC_3, KC_DOT, KC_ASTR,
+        _______, XXXXXXX, XXXXXXX, XXXXXXX, OSM(MOD_LSFT), XXXXXXX,          KC_MINS, KC_4, KC_5, KC_6, KC_DOT, _______,
+        _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                KC_EQUAL,  KC_1, KC_2, KC_3, KC_SLSH, KC_ASTR,
                                                XXXXXXX, TO(0), KC_ENT,   KC_SPC, TO(5), XXXXXXX
     ),
     [5] = LAYOUT_split_3x6_3(
         KC_TAB, XXXXXXX, DEGREE, KC_PIPE, KC_AMPR, KC_EXLM,                 KC_EQUAL, KC_LCBR, KC_RCBR, KC_PERC, KC_ASTR, KC_BSPC,
-        _______, XXXXXXX, KC_AT, KC_TILD, KC_SLSH, KC_HASH,                  KC_UNDS, KC_LPRN, KC_RPRN, KC_DLR, KC_BSLS, _______,
-        _______, KC_CIRC, KC_QUOT, KC_LT, KC_GT, KC_MINS,                    KC_PLUS,  KC_LBRC, KC_RBRC, KC_QUES, KC_COLN, KC_GRV,
+        _______, XXXXXXX, KC_AT, KC_TILD, KC_SLSH, KC_HASH,                  KC_UNDS, KC_LPRN, KC_RPRN, KC_DLR, KC_COLN, _______,
+        _______, KC_CIRC, KC_QUOT, KC_LT, KC_GT, KC_MINS,                    KC_PLUS,  KC_LBRC, KC_RBRC, KC_QUES, KC_BSLS, KC_GRV,
                                                XXXXXXX, TO(0), KC_ENT,   KC_SPC, TO(4), XXXXXXX
     ),
     [6] = LAYOUT_split_3x6_3(
