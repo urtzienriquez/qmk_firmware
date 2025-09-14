@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define TAPPING_TERM_PER_KEY  // Allow different tapping terms for different keys
 
 // Combo configuration
-#define COMBO_TERM 50  // Increased from 50ms for more reliable combo detection
+#define COMBO_TERM 30  // Increased from 50ms for more reliable combo detection
 #define COMBO_MUST_HOLD_MODS  // Require holding modifier combos
 #define COMBO_HOLD_TERM 150   // How long to hold combo for it to register
 

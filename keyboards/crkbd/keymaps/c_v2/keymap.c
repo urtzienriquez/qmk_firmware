@@ -21,6 +21,8 @@ enum custom_keycodes {
     O_ACUTE,
     U_ACUTE,
     DEGREE,
+    INV_EXCL,
+    INV_QUES,
 };
 
 // Spanish/unicode combos
@@ -31,12 +33,12 @@ const uint16_t PROGMEM arrows_combo[]    = {KC_ENT, KC_SPC, COMBO_END};
 const uint16_t PROGMEM mouse_combo[]    = {OSL(4), OSL(5), COMBO_END};
 const uint16_t PROGMEM locknum_combo[]    = {OSL(4), KC_SPC, COMBO_END};
 const uint16_t PROGMEM locksym_combo[]    = {OSL(5), KC_ENT, COMBO_END};
-const uint16_t PROGMEM ntilde_combo[] = {KC_N, KC_M, COMBO_END};
-const uint16_t PROGMEM acute_a_combo[] = {KC_A, KC_S, COMBO_END};
-const uint16_t PROGMEM acute_e_combo[] = {KC_E, KC_R, COMBO_END};
-const uint16_t PROGMEM acute_i_combo[] = {KC_I, KC_O, COMBO_END};
-const uint16_t PROGMEM acute_o_combo[] = {KC_O, KC_P, COMBO_END};
-const uint16_t PROGMEM acute_u_combo[] = {KC_U, KC_I, COMBO_END};
+const uint16_t PROGMEM ntilde_combo[] = {KC_N, KC_F, COMBO_END};
+const uint16_t PROGMEM acute_a_combo[] = {KC_A, KC_J, COMBO_END};
+const uint16_t PROGMEM acute_e_combo[] = {KC_E, KC_J, COMBO_END};
+const uint16_t PROGMEM acute_i_combo[] = {KC_I, KC_F, COMBO_END};
+const uint16_t PROGMEM acute_o_combo[] = {KC_O, KC_F, COMBO_END};
+const uint16_t PROGMEM acute_u_combo[] = {KC_U, KC_F, COMBO_END};
 
 combo_t key_combos[] = {
     COMBO(caps_combo, KC_CAPS),
@@ -70,6 +72,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             case O_ACUTE: send_unicode_string(uppercase ? "Ó" : "ó"); return false;
             case U_ACUTE: send_unicode_string(uppercase ? "Ú" : "ú"); return false;
             case DEGREE: send_unicode_string("º"); return false;
+            case INV_EXCL: send_unicode_string("¡"); return false;
+            case INV_QUES: send_unicode_string("¿"); return false;
         }
     }
 
@@ -113,37 +117,37 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         _______, KC_LSFT, KC_LCTL, KC_LGUI, KC_LALT, XXXXXXX,                XXXXXXX, KC_LALT, KC_LGUI, KC_LCTL, KC_LSFT, _______,
         _______, XXXXXXX, LCS(KC_X), LCS(KC_C), LCS(KC_V), XXXXXXX,          XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-                                               XXXXXXX, TO(0), KC_ENT,   KC_SPC, XXXXXXX, XXXXXXX
+                                               _______, TO(0), KC_ENT,   KC_SPC, XXXXXXX, XXXXXXX
     ),
     [2] = LAYOUT_split_3x6_3(
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                KC_LEFT, KC_DOWN, KC_UP, KC_RGHT, XXXXXXX, XXXXXXX,
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-                                               XXXXXXX, TO(0), KC_ENT,   KC_SPC, XXXXXXX, XXXXXXX
+                                               _______, TO(0), KC_ENT,   KC_SPC, XXXXXXX, XXXXXXX
     ),
     [3] = LAYOUT_split_3x6_3(
         XXXXXXX, XXXXXXX, XXXXXXX, MS_WHLU, XXXXXXX, MS_BTN2,                XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         XXXXXXX, MS_ACL0, MS_WHLL, MS_WHLD, MS_WHLR, MS_BTN1,                MS_LEFT, MS_DOWN, MS_UP,   MS_RGHT, XXXXXXX, XXXXXXX,
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, MS_BTN3,                XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-                                               XXXXXXX, TO(0), KC_ENT,   KC_SPC, XXXXXXX, XXXXXXX
+                                               _______, TO(0), KC_ENT,   KC_SPC, XXXXXXX, XXXXXXX
     ),
     [4] = LAYOUT_split_3x6_3(
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                KC_LBRC, KC_7, KC_8, KC_9, KC_0, KC_RBRC,
         _______, XXXXXXX, XXXXXXX, XXXXXXX, OSM(MOD_LSFT), XXXXXXX,          KC_MINS, KC_4, KC_5, KC_6, KC_DOT, _______,
         _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                KC_EQUAL,  KC_1, KC_2, KC_3, KC_SLSH, KC_ASTR,
-                                               XXXXXXX, TO(0), KC_ENT,   KC_SPC, TO(5), XXXXXXX
+                                               _______, TO(0), KC_ENT,   KC_SPC, TO(5), XXXXXXX
     ),
     [5] = LAYOUT_split_3x6_3(
-        KC_TAB, XXXXXXX, DEGREE, KC_PIPE, KC_AMPR, KC_EXLM,                 KC_EQUAL, KC_LCBR, KC_RCBR, KC_PERC, KC_ASTR, KC_BSPC,
-        _______, XXXXXXX, KC_AT, KC_TILD, KC_SLSH, KC_HASH,                  KC_UNDS, KC_LPRN, KC_RPRN, KC_DLR, KC_COLN, _______,
-        _______, KC_CIRC, KC_QUOT, KC_LT, KC_GT, KC_MINS,                    KC_PLUS,  KC_LBRC, KC_RBRC, KC_QUES, KC_BSLS, KC_GRV,
-                                               XXXXXXX, TO(0), KC_ENT,   KC_SPC, TO(4), XXXXXXX
+        KC_TAB, INV_EXCL, DEGREE, KC_PIPE, KC_AMPR, KC_EXLM,                 KC_EQUAL, KC_LCBR, KC_RCBR, KC_PERC, KC_ASTR, KC_BSPC,
+        _______, INV_QUES, KC_AT, KC_TILD, KC_SLSH, KC_QUES,                 KC_UNDS, KC_LPRN, KC_RPRN, KC_DLR, KC_COLN, _______,
+        _______, KC_CIRC, KC_QUOT, KC_LT, KC_GT, KC_MINS,                    KC_PLUS,  KC_LBRC, KC_RBRC, KC_HASH, KC_BSLS, KC_GRV,
+                                               _______, TO(0), KC_ENT,   KC_SPC, TO(4), XXXXXXX
     ),
     [6] = LAYOUT_split_3x6_3(
         QK_BOOT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6,
         RM_TOGG, RM_HUEU, RM_SATU, RM_VALU, XXXXXXX, XXXXXXX,                KC_F7, KC_F8, KC_F9, KC_F10, KC_F11, KC_F12,
         RM_NEXT, RM_HUED, RM_SATD, RM_VALD, XXXXXXX, XXXXXXX,                KC_PSCR, KC_SCRL, KC_PAUS, KC_INS, KC_DEL, XXXXXXX,
-                                               XXXXXXX, TO(0), KC_ENT,   KC_SPC, TO(5), XXXXXXX
+                                               _______, TO(0), KC_ENT,   KC_SPC, TO(5), XXXXXXX
     )
 };
 
