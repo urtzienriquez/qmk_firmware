@@ -126,13 +126,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                               MO(_MODIFIERS), OSL(_NUMBERS), KC_ENT,   KC_SPC, OSL(_SYMBOLS), MO(_MODIFIERS)
     ),
     [_NUMBERS] = LAYOUT_split_3x6_3(
-        XXXXXXX, XXXXXXX, XXXXXXX, KC_LCBR, KC_RCBR, KC_EXLM,                KC_EQUAL, KC_7, KC_8, KC_9, KC_0, XXXXXXX,
+        XXXXXXX, XXXXXXX, XXXXXXX, KC_LCBR, KC_RCBR, KC_EXLM,                KC_EQUAL, KC_7, KC_8, KC_9, KC_0, _______,
         _______, XXXXXXX, XXXXXXX, KC_LPRN, KC_RPRN, OSM(MOD_LSFT),          KC_MINS, KC_4, KC_5, KC_6, KC_DOT, KC_COMM,
         _______, XXXXXXX, XXXXXXX, KC_LBRC, KC_RBRC, XXXXXXX,                KC_PLUS,  KC_1, KC_2, KC_3, KC_SLSH, KC_ASTR,
                                          _______, TO(_BASE), KC_ENT,   KC_SPC, TO(_SYMBOLS), _______
     ),
     [_SYMBOLS] = LAYOUT_split_3x6_3(
-        KC_TAB, INV_EXCL, DEGREE, KC_PIPE, KC_AMPR, KC_EXLM,                 KC_EQUAL, KC_LCBR, KC_RCBR, KC_DQUO, KC_ASTR, KC_BSPC,
+        KC_TAB, INV_EXCL, DEGREE, KC_PIPE, KC_AMPR, KC_EXLM,                 KC_EQUAL, KC_LCBR, KC_RCBR, KC_DQUO, KC_ASTR, _______,
         _______, INV_QUES, KC_AT, KC_TILD, KC_SLSH, KC_QUES,                 KC_UNDS, KC_LPRN, KC_RPRN, KC_DLR, KC_COLN, _______,
         _______, KC_CIRC, KC_LT, KC_GT, KC_HASH, KC_MINS,                    KC_PLUS, KC_LBRC, KC_RBRC, KC_PERC, KC_BSLS, KC_GRV,
                                          _______, TO(_BASE), KC_ENT,   KC_SPC, TO(_NUMBERS), _______
