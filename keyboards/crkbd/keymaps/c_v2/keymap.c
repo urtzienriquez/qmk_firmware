@@ -40,8 +40,8 @@ const uint16_t PROGMEM caps_combo[] = {KC_J, KC_F, COMBO_END};
 const uint16_t PROGMEM esc_combo[] = {KC_J, KC_K, COMBO_END};
 const uint16_t PROGMEM tab_combo[] = {KC_D, KC_F, COMBO_END};
 const uint16_t PROGMEM arrows_combo[] = {OSL(_NUMBERS), OSL(_SYMBOLS), COMBO_END};
-const uint16_t PROGMEM mouse_combo[] = {KC_ENT, KC_SPC, COMBO_END};
-const uint16_t PROGMEM locknum_combo[] = {OSL(_NUMBERS), KC_SPC, COMBO_END};
+const uint16_t PROGMEM mouse_combo[] = {KC_ENT, MT(MOD_LSFT, KC_SPC), COMBO_END};
+const uint16_t PROGMEM locknum_combo[] = {OSL(_NUMBERS), MT(MOD_LSFT, KC_SPC), COMBO_END};
 const uint16_t PROGMEM locksym_combo[] = {OSL(_SYMBOLS), KC_ENT, COMBO_END};
 const uint16_t PROGMEM function_combo[] = {KC_TAB, KC_BSPC, COMBO_END};
 const uint16_t PROGMEM ntilde_combo[] = {KC_N, KC_F, COMBO_END};
@@ -123,43 +123,43 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TAB, KC_Q, KC_W, KC_E, KC_R, KC_T,                                KC_Y, KC_U, KC_I, KC_O, KC_P, KC_BSPC,
         OSM(MOD_LALT), KC_A, KC_S, KC_D, KC_F, KC_G,                         KC_H, KC_J, KC_K, KC_L, KC_SCLN, OSM(MOD_LCTL),
         OSM(MOD_LSFT), KC_Z, KC_X, KC_C, KC_V, KC_B,                         KC_N, KC_M, KC_COMM, KC_DOT, KC_SLSH, KC_QUOT,
-                              MO(_MODIFIERS), OSL(_NUMBERS), KC_ENT,   KC_SPC, OSL(_SYMBOLS), MO(_MODIFIERS)
+                              MO(_MODIFIERS), OSL(_NUMBERS), KC_ENT,    MT(MOD_LSFT, KC_SPC), OSL(_SYMBOLS), MO(_MODIFIERS)
     ),
     [_NUMBERS] = LAYOUT_split_3x6_3(
         XXXXXXX, XXXXXXX, XXXXXXX, KC_LCBR, KC_RCBR, KC_EXLM,                KC_EQUAL, KC_7, KC_8, KC_9, KC_0, _______,
-        _______, XXXXXXX, XXXXXXX, KC_LPRN, KC_RPRN, OSM(MOD_LSFT),          KC_MINS, KC_4, KC_5, KC_6, KC_DOT, KC_COMM,
+        _______, XXXXXXX, XXXXXXX, KC_LPRN, KC_RPRN, XXXXXXX,                KC_MINS, KC_4, KC_5, KC_6, KC_DOT, KC_COMM,
         _______, XXXXXXX, XXXXXXX, KC_LBRC, KC_RBRC, XXXXXXX,                KC_PLUS,  KC_1, KC_2, KC_3, KC_SLSH, KC_ASTR,
-                                         _______, TO(_BASE), KC_ENT,   KC_SPC, TO(_SYMBOLS), _______
+                                         _______, TO(_BASE), KC_ENT,    MT(MOD_LSFT, KC_SPC), TO(_SYMBOLS), _______
     ),
     [_SYMBOLS] = LAYOUT_split_3x6_3(
         KC_TAB, INV_EXCL, DEGREE, KC_PIPE, KC_AMPR, KC_EXLM,                 KC_EQUAL, KC_LCBR, KC_RCBR, KC_DQUO, KC_ASTR, _______,
         _______, INV_QUES, KC_AT, KC_TILD, KC_SLSH, KC_QUES,                 KC_UNDS, KC_LPRN, KC_RPRN, KC_DLR, KC_COLN, _______,
         _______, KC_CIRC, KC_LT, KC_GT, KC_HASH, KC_MINS,                    KC_PLUS, KC_LBRC, KC_RBRC, KC_PERC, KC_BSLS, KC_GRV,
-                                         _______, TO(_BASE), KC_ENT,   KC_SPC, TO(_NUMBERS), _______
+                                         _______, TO(_BASE), KC_ENT,    MT(MOD_LSFT, KC_SPC), TO(_NUMBERS), _______
     ),
     [_MODIFIERS] = LAYOUT_split_3x6_3(
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         _______, KC_LSFT, KC_LCTL, KC_LGUI, KC_LALT, XXXXXXX,                XXXXXXX, KC_LALT, KC_LGUI, KC_LCTL, KC_LSFT, _______,
         _______, XXXXXXX, LCS(KC_X), LCS(KC_C), LCS(KC_V), XXXXXXX,          XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-                                         XXXXXXX, TO(_BASE), KC_ENT,   KC_SPC, XXXXXXX, XXXXXXX
+                                         XXXXXXX, TO(_BASE), KC_ENT,    MT(MOD_LSFT, KC_SPC), XXXXXXX, XXXXXXX
     ),
     [_ARROWS] = LAYOUT_split_3x6_3(
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                KC_LEFT, KC_DOWN, KC_UP, KC_RGHT, XXXXXXX, XXXXXXX,
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-                                         XXXXXXX, TO(_BASE), KC_ENT,   KC_SPC, XXXXXXX, XXXXXXX
+                                         XXXXXXX, TO(_BASE), KC_ENT,    MT(MOD_LSFT, KC_SPC), XXXXXXX, XXXXXXX
     ),
     [_MOUSE] = LAYOUT_split_3x6_3(
         XXXXXXX, XXXXXXX, XXXXXXX, MS_WHLU, XXXXXXX, MS_BTN2,                XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         XXXXXXX, MS_ACL0, MS_WHLL, MS_WHLD, MS_WHLR, MS_BTN1,                MS_LEFT, MS_DOWN, MS_UP,   MS_RGHT, XXXXXXX, XXXXXXX,
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, MS_BTN3,                XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-                                         XXXXXXX, TO(_BASE), KC_ENT,   KC_SPC, XXXXXXX, XXXXXXX
+                                         XXXXXXX, TO(_BASE), KC_ENT,    MT(MOD_LSFT, KC_SPC), XXXXXXX, XXXXXXX
     ),
     [_FUNCTION] = LAYOUT_split_3x6_3(
         QK_BOOT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                XXXXXXX, KC_F7, KC_F8, KC_F9, KC_F10, XXXXXXX,
         RM_TOGG, RM_HUEU, RM_SATU, RM_VALU, XXXXXXX, XXXXXXX,                XXXXXXX, KC_F4, KC_F5, KC_F6, KC_F11, XXXXXXX,
         RM_NEXT, RM_HUED, RM_SATD, RM_VALD, XXXXXXX, XXXXXXX,                XXXXXXX, KC_F1, KC_F2, KC_F3, KC_F12, XXXXXXX,
-                                         XXXXXXX, TO(_BASE), KC_ENT,   KC_SPC, TO(_SYMBOLS), XXXXXXX
+                                         XXXXXXX, TO(_BASE), KC_ENT,    MT(MOD_LSFT, KC_SPC), TO(_SYMBOLS), XXXXXXX
     )
 };
 
