@@ -13,6 +13,16 @@ GNU General Public License for more details.
 
 #include QMK_KEYBOARD_H
 
+enum layers {
+    _BASE = 0,
+    _NUMBERS,
+    _SYMBOLS,
+    _MODIFIERS,
+    _ARROWS,
+    _MOUSE,
+    _FUNCTION
+};
+
 enum custom_keycodes {
     NTILDE = SAFE_RANGE,
     A_ACUTE,
@@ -26,13 +36,13 @@ enum custom_keycodes {
 };
 
 // Spanish/unicode combos
-const uint16_t PROGMEM caps_combo[]   = {KC_J, KC_F, COMBO_END};
-const uint16_t PROGMEM esc_combo[]    = {KC_J, KC_K, COMBO_END};
-const uint16_t PROGMEM tab_combo[]    = {KC_D, KC_F, COMBO_END};
-const uint16_t PROGMEM arrows_combo[]    = {KC_ENT, KC_SPC, COMBO_END};
-const uint16_t PROGMEM mouse_combo[]    = {OSL(4), OSL(5), COMBO_END};
-const uint16_t PROGMEM locknum_combo[]    = {OSL(4), KC_SPC, COMBO_END};
-const uint16_t PROGMEM locksym_combo[]    = {OSL(5), KC_ENT, COMBO_END};
+const uint16_t PROGMEM caps_combo[] = {KC_J, KC_F, COMBO_END};
+const uint16_t PROGMEM esc_combo[] = {KC_J, KC_K, COMBO_END};
+const uint16_t PROGMEM tab_combo[] = {KC_D, KC_F, COMBO_END};
+const uint16_t PROGMEM arrows_combo[] = {OSL(_NUMBERS), OSL(_SYMBOLS), COMBO_END};
+const uint16_t PROGMEM mouse_combo[] = {KC_ENT, KC_SPC, COMBO_END};
+const uint16_t PROGMEM locknum_combo[] = {OSL(_NUMBERS), KC_SPC, COMBO_END};
+const uint16_t PROGMEM locksym_combo[] = {OSL(_SYMBOLS), KC_ENT, COMBO_END};
 const uint16_t PROGMEM ntilde_combo[] = {KC_N, KC_F, COMBO_END};
 const uint16_t PROGMEM acute_a_combo[] = {KC_A, KC_J, COMBO_END};
 const uint16_t PROGMEM acute_e_combo[] = {KC_E, KC_J, COMBO_END};
@@ -44,10 +54,10 @@ combo_t key_combos[] = {
     COMBO(caps_combo, KC_CAPS),
     COMBO(esc_combo, KC_ESC),
     COMBO(tab_combo, KC_TAB),
-    COMBO(arrows_combo, MO(2)),
-    COMBO(mouse_combo, MO(3)),
-    COMBO(locknum_combo, TO(4)),
-    COMBO(locksym_combo, TO(5)),
+    COMBO(arrows_combo, MO(_ARROWS)),
+    COMBO(mouse_combo, MO(_MOUSE)),
+    COMBO(locknum_combo, TO(_NUMBERS)),
+    COMBO(locksym_combo, TO(_SYMBOLS)),
     COMBO(ntilde_combo, NTILDE),
     COMBO(acute_a_combo, A_ACUTE),
     COMBO(acute_e_combo, E_ACUTE),
@@ -92,13 +102,13 @@ void keyboard_post_init_user(void) {
 layer_state_t layer_state_set_user(layer_state_t state) {
     #ifdef RGB_MATRIX_ENABLE
     switch (get_highest_layer(state)) {
-        case 0: rgb_matrix_sethsv_noeeprom(HSV_BLUE); break;
-        case 1: rgb_matrix_sethsv_noeeprom(HSV_GREEN); break;
-        case 2: rgb_matrix_sethsv_noeeprom(HSV_ORANGE); break;
-        case 3: rgb_matrix_sethsv_noeeprom(HSV_CYAN); break;
-        case 4: rgb_matrix_sethsv_noeeprom(HSV_PURPLE); break;
-        case 5: rgb_matrix_sethsv_noeeprom(HSV_YELLOW); break;
-        case 6: rgb_matrix_sethsv_noeeprom(HSV_RED); break;
+        case _BASE: rgb_matrix_sethsv_noeeprom(HSV_BLUE); break;
+        case _NUMBERS: rgb_matrix_sethsv_noeeprom(HSV_PURPLE); break;
+        case _SYMBOLS: rgb_matrix_sethsv_noeeprom(HSV_YELLOW); break;
+        case _MODIFIERS: rgb_matrix_sethsv_noeeprom(HSV_GREEN); break;
+        case _ARROWS: rgb_matrix_sethsv_noeeprom(HSV_ORANGE); break;
+        case _MOUSE: rgb_matrix_sethsv_noeeprom(HSV_CYAN); break;
+        case _FUNCTION: rgb_matrix_sethsv_noeeprom(HSV_RED); break;
         default: rgb_matrix_sethsv_noeeprom(HSV_MAGENTA); break;
     }
     #endif
@@ -107,47 +117,47 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
 // --- Keymaps ---
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-    [0] = LAYOUT_split_3x6_3(
+    [_BASE] = LAYOUT_split_3x6_3(
         KC_TAB, KC_Q, KC_W, KC_E, KC_R, KC_T,                                KC_Y, KC_U, KC_I, KC_O, KC_P, KC_BSPC,
         OSM(MOD_LALT), KC_A, KC_S, KC_D, KC_F, KC_G,                         KC_H, KC_J, KC_K, KC_L, KC_SCLN, OSM(MOD_LCTL),
         OSM(MOD_LSFT), KC_Z, KC_X, KC_C, KC_V, KC_B,                         KC_N, KC_M, KC_COMM, KC_DOT, KC_SLSH, KC_QUOT,
-                                                MO(1), OSL(4), KC_ENT,   KC_SPC, OSL(5), OSL(6)
+                              MO(_MODIFIERS), OSL(_NUMBERS), KC_ENT,   KC_SPC, OSL(_SYMBOLS), OSL(_FUNCTION)
     ),
-    [1] = LAYOUT_split_3x6_3(
+    [_NUMBERS] = LAYOUT_split_3x6_3(
+        XXXXXXX, XXXXXXX, XXXXXXX, KC_LCBR, KC_RCBR, KC_EXLM,                KC_EQUAL, KC_7, KC_8, KC_9, KC_0, XXXXXXX,
+        _______, XXXXXXX, XXXXXXX, KC_LPRN, KC_RPRN, OSM(MOD_LSFT),          KC_MINS, KC_4, KC_5, KC_6, KC_DOT, KC_COMM,
+        _______, XXXXXXX, XXXXXXX, KC_LBRC, KC_RBRC, XXXXXXX,                KC_PLUS,  KC_1, KC_2, KC_3, KC_SLSH, KC_ASTR,
+                                         _______, TO(_BASE), KC_ENT,   KC_SPC, TO(_SYMBOLS), XXXXXXX
+    ),
+    [_SYMBOLS] = LAYOUT_split_3x6_3(
+        KC_TAB, INV_EXCL, DEGREE, KC_PIPE, KC_AMPR, KC_EXLM,                 KC_EQUAL, KC_LCBR, KC_RCBR, KC_DQUO, KC_ASTR, KC_BSPC,
+        _______, INV_QUES, KC_AT, KC_TILD, KC_SLSH, KC_QUES,                 KC_UNDS, KC_LPRN, KC_RPRN, KC_DLR, KC_COLN, _______,
+        _______, KC_CIRC, KC_LT, KC_GT, KC_HASH, KC_MINS,                    KC_PLUS, KC_LBRC, KC_RBRC, KC_PERC, KC_BSLS, KC_GRV,
+                                         _______, TO(_BASE), KC_ENT,   KC_SPC, TO(_NUMBERS), XXXXXXX
+    ),
+    [_MODIFIERS] = LAYOUT_split_3x6_3(
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         _______, KC_LSFT, KC_LCTL, KC_LGUI, KC_LALT, XXXXXXX,                XXXXXXX, KC_LALT, KC_LGUI, KC_LCTL, KC_LSFT, _______,
         _______, XXXXXXX, LCS(KC_X), LCS(KC_C), LCS(KC_V), XXXXXXX,          XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-                                               XXXXXXX, TO(0), KC_ENT,   KC_SPC, XXXXXXX, XXXXXXX
+                                         XXXXXXX, TO(_BASE), KC_ENT,   KC_SPC, XXXXXXX, XXXXXXX
     ),
-    [2] = LAYOUT_split_3x6_3(
+    [_ARROWS] = LAYOUT_split_3x6_3(
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                KC_LEFT, KC_DOWN, KC_UP, KC_RGHT, XXXXXXX, XXXXXXX,
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-                                               XXXXXXX, TO(0), KC_ENT,   KC_SPC, XXXXXXX, XXXXXXX
+                                         XXXXXXX, TO(_BASE), KC_ENT,   KC_SPC, XXXXXXX, XXXXXXX
     ),
-    [3] = LAYOUT_split_3x6_3(
+    [_MOUSE] = LAYOUT_split_3x6_3(
         XXXXXXX, XXXXXXX, XXXXXXX, MS_WHLU, XXXXXXX, MS_BTN2,                XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         XXXXXXX, MS_ACL0, MS_WHLL, MS_WHLD, MS_WHLR, MS_BTN1,                MS_LEFT, MS_DOWN, MS_UP,   MS_RGHT, XXXXXXX, XXXXXXX,
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, MS_BTN3,                XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-                                               XXXXXXX, TO(0), KC_ENT,   KC_SPC, XXXXXXX, XXXXXXX
+                                         XXXXXXX, TO(_BASE), KC_ENT,   KC_SPC, XXXXXXX, XXXXXXX
     ),
-    [4] = LAYOUT_split_3x6_3(
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                KC_LBRC, KC_7, KC_8, KC_9, KC_0, KC_RBRC,
-        _______, XXXXXXX, XXXXXXX, XXXXXXX, OSM(MOD_LSFT), XXXXXXX,          KC_MINS, KC_4, KC_5, KC_6, KC_DOT, _______,
-        _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                KC_EQUAL,  KC_1, KC_2, KC_3, KC_SLSH, KC_ASTR,
-                                               XXXXXXX, TO(0), KC_ENT,   KC_SPC, TO(5), XXXXXXX
-    ),
-    [5] = LAYOUT_split_3x6_3(
-        KC_TAB, INV_EXCL, DEGREE, KC_PIPE, KC_AMPR, KC_EXLM,                 KC_EQUAL, KC_LCBR, KC_RCBR, KC_PERC, KC_ASTR, KC_BSPC,
-        _______, INV_QUES, KC_AT, KC_TILD, KC_SLSH, KC_QUES,                 KC_UNDS, KC_LPRN, KC_RPRN, KC_DLR, KC_COLN, _______,
-        _______, KC_CIRC, KC_QUOT, KC_LT, KC_GT, KC_MINS,                    KC_PLUS,  KC_LBRC, KC_RBRC, KC_HASH, KC_BSLS, KC_GRV,
-                                               XXXXXXX, TO(0), KC_ENT,   KC_SPC, TO(4), XXXXXXX
-    ),
-    [6] = LAYOUT_split_3x6_3(
+    [_FUNCTION] = LAYOUT_split_3x6_3(
         QK_BOOT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6,
         RM_TOGG, RM_HUEU, RM_SATU, RM_VALU, XXXXXXX, XXXXXXX,                KC_F7, KC_F8, KC_F9, KC_F10, KC_F11, KC_F12,
         RM_NEXT, RM_HUED, RM_SATD, RM_VALD, XXXXXXX, XXXXXXX,                KC_PSCR, KC_SCRL, KC_PAUS, KC_INS, KC_DEL, XXXXXXX,
-                                               XXXXXXX, TO(0), KC_ENT,   KC_SPC, TO(5), XXXXXXX
+                                         XXXXXXX, TO(_BASE), KC_ENT,   KC_SPC, TO(_SYMBOLS), XXXXXXX
     )
 };
 
@@ -172,55 +182,55 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
 
 static void oled_render_vertical_layers(void) {
     uint8_t current_layer = get_highest_layer(layer_state);
-    oled_write_P(PSTR("layer"), false);
+    oled_write_P(PSTR("LAYER"), false);
     oled_advance_page(true);
     // Layer 0 - Base
     if (current_layer == 0) {
-        oled_write_P(PSTR(">BASE"), true);  // White background, black text
+        oled_write_P(PSTR(">base"), true);  // White background, black text
     } else {
-        oled_write_P(PSTR(" BASE"), false);
+        oled_write_P(PSTR(" base"), false);
     }
+    // Layer 1 - Numbers
     if (current_layer == 1) {
-        oled_write_P(PSTR(">MODS"), true);  // White background, black text
+        oled_write_P(PSTR(">nums"), true);  // White background, black text
     } else {
-        oled_write_P(PSTR(" MODS"), false);
+        oled_write_P(PSTR(" nums"), false);
     }
-    // Layer 1 - Numbers
+    // Layer 2 - Symbols
     if (current_layer == 2) {
-        oled_write_P(PSTR(">ARWS"), true);  // White background, black text
+        oled_write_P(PSTR(">syms"), true);  // White background, black text
     } else {
-        oled_write_P(PSTR(" ARWS"), false);
+        oled_write_P(PSTR(" syms"), false);
     }
-    // Layer 1 - Numbers
     if (current_layer == 3) {
-        oled_write_P(PSTR(">MOUS"), true);  // White background, black text
+        oled_write_P(PSTR(">mods"), true);  // White background, black text
     } else {
-        oled_write_P(PSTR(" MOUS"), false);
+        oled_write_P(PSTR(" mods"), false);
     }
     // Layer 1 - Numbers
     if (current_layer == 4) {
-        oled_write_P(PSTR(">NUMB"), true);  // White background, black text
+        oled_write_P(PSTR(">arws"), true);  // White background, black text
     } else {
-        oled_write_P(PSTR(" NUMB"), false);
+        oled_write_P(PSTR(" arws"), false);
     }
-    // Layer 2 - Symbols
+    // Layer 1 - Numbers
     if (current_layer == 5) {
-        oled_write_P(PSTR(">SYMB"), true);  // White background, black text
+        oled_write_P(PSTR(">mous"), true);  // White background, black text
     } else {
-        oled_write_P(PSTR(" SYMB"), false);
+        oled_write_P(PSTR(" mous"), false);
     }
     // Layer 3 - Function
     if (current_layer == 6) {
-        oled_write_P(PSTR(">FUNC"), true);  // White background, black text
+        oled_write_P(PSTR(">func"), true);  // White background, black text
     } else {
-        oled_write_P(PSTR(" FUNC"), false);
+        oled_write_P(PSTR(" func"), false);
     }
     oled_advance_page(true);
 }
 
 static void oled_render_mods_status(void) {
     uint8_t mods = get_mods() | get_oneshot_mods();
-    oled_write_P(PSTR("mods:"), false);
+    oled_write_P(PSTR("MODS:"), false);
     // Display SCAG format (Shift, Ctrl, Gui, Alt)
     char mods_str[5] = "----";
     mods_str[4] = '\0';  // Null terminate the string
