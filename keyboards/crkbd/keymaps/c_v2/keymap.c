@@ -59,7 +59,7 @@ combo_t key_combos[] = {
     COMBO(mouse_combo, MO(_MOUSE)),
     COMBO(locknum_combo, TO(_NUMBERS)),
     COMBO(locksym_combo, TO(_SYMBOLS)),
-    COMBO(function_combo, OSL(_FUNCTION)),
+    COMBO(function_combo, TO(_FUNCTION)),
     COMBO(ntilde_combo, NTILDE),
     COMBO(acute_a_combo, A_ACUTE),
     COMBO(acute_e_combo, E_ACUTE),
