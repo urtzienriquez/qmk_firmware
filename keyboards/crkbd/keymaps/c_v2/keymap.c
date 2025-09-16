@@ -39,11 +39,11 @@ enum custom_keycodes {
 const uint16_t PROGMEM caps_combo[] = {KC_J, KC_F, COMBO_END};
 const uint16_t PROGMEM esc_combo[] = {KC_J, KC_K, COMBO_END};
 const uint16_t PROGMEM tab_combo[] = {KC_D, KC_F, COMBO_END};
-const uint16_t PROGMEM arrows_combo[] = {OSL(_NUMBERS), OSL(_SYMBOLS), COMBO_END};
-const uint16_t PROGMEM mouse_combo[] = {KC_ENT, MT(MOD_LSFT, KC_SPC), COMBO_END};
+const uint16_t PROGMEM arrows_combo[] = {KC_ENT, MT(MOD_LSFT, KC_SPC), COMBO_END};
+const uint16_t PROGMEM mouse_combo[] = {OSL(_NUMBERS), OSL(_SYMBOLS), COMBO_END};
 const uint16_t PROGMEM locknum_combo[] = {OSL(_NUMBERS), MT(MOD_LSFT, KC_SPC), COMBO_END};
-const uint16_t PROGMEM locksym_combo[] = {OSL(_SYMBOLS), KC_ENT, COMBO_END};
-const uint16_t PROGMEM function_combo[] = {KC_TAB, KC_BSPC, COMBO_END};
+const uint16_t PROGMEM locksym_combo[] = {KC_ENT, OSL(_SYMBOLS), COMBO_END};
+const uint16_t PROGMEM function_combo[] = {MO(_MODIFIERS), MT(MOD_LSFT, KC_SPC), COMBO_END};
 const uint16_t PROGMEM ntilde_combo[] = {KC_N, KC_F, COMBO_END};
 const uint16_t PROGMEM acute_a_combo[] = {KC_A, KC_J, COMBO_END};
 const uint16_t PROGMEM acute_e_combo[] = {KC_E, KC_J, COMBO_END};
@@ -59,7 +59,7 @@ combo_t key_combos[] = {
     COMBO(mouse_combo, MO(_MOUSE)),
     COMBO(locknum_combo, TO(_NUMBERS)),
     COMBO(locksym_combo, TO(_SYMBOLS)),
-    COMBO(function_combo, TO(_FUNCTION)),
+    COMBO(function_combo, MO(_FUNCTION)),
     COMBO(ntilde_combo, NTILDE),
     COMBO(acute_a_combo, A_ACUTE),
     COMBO(acute_e_combo, E_ACUTE),
