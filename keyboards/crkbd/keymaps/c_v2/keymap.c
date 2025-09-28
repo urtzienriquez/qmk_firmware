@@ -39,8 +39,8 @@ enum custom_keycodes {
 const uint16_t PROGMEM caps_combo[] = {KC_J, KC_F, COMBO_END};
 const uint16_t PROGMEM esc_combo[] = {KC_J, KC_K, COMBO_END};
 const uint16_t PROGMEM tab_combo[] = {KC_D, KC_F, COMBO_END};
-const uint16_t PROGMEM arrows_combo[] = {KC_ENT, MT(MOD_LSFT, KC_SPC), COMBO_END};
-const uint16_t PROGMEM mouse_combo[] = {OSL(_NUMBERS), OSL(_SYMBOLS), COMBO_END};
+const uint16_t PROGMEM arrows_combo[] = {OSL(_NUMBERS), OSL(_SYMBOLS), COMBO_END};
+const uint16_t PROGMEM mouse_combo[] = {KC_ENT, MT(MOD_LSFT, KC_SPC), COMBO_END};
 const uint16_t PROGMEM locknum_combo[] = {OSL(_NUMBERS), MT(MOD_LSFT, KC_SPC), COMBO_END};
 const uint16_t PROGMEM locksym_combo[] = {KC_ENT, OSL(_SYMBOLS), COMBO_END};
 const uint16_t PROGMEM function_combo[] = {MO(_MODIFIERS), MT(MOD_LSFT, KC_SPC), COMBO_END};
