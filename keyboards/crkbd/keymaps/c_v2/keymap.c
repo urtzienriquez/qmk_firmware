@@ -134,7 +134,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_SYMBOLS] = LAYOUT_split_3x6_3(
         KC_TAB, INV_EXCL, DEGREE, KC_PIPE, KC_AMPR, KC_EXLM,                 KC_EQUAL, KC_LCBR, KC_RCBR, KC_DQUO, KC_ASTR, _______,
         XXXXXXX, INV_QUES, KC_AT, KC_TILD, KC_SLSH, KC_QUES,                 KC_UNDS, KC_LPRN, KC_RPRN, KC_DLR, KC_COLN, _______,
-        XXXXXXX, KC_CIRC, KC_LT, KC_GT, KC_HASH, KC_MINS,                    KC_PLUS, KC_LBRC, KC_RBRC, KC_PERC, KC_BSLS, KC_GRV,
+        XXXXXXX, KC_CIRC, KC_LT, KC_MINS, KC_GT, KC_HASH,                    KC_PLUS, KC_LBRC, KC_RBRC, KC_PERC, KC_BSLS, KC_GRV,
                                          _______, TO(_BASE), KC_ENT,    MT(MOD_LSFT, KC_SPC), TO(_NUMBERS), _______
     ),
     [_MODIFIERS] = LAYOUT_split_3x6_3(
