@@ -30,6 +30,12 @@ enum custom_keycodes {
     I_ACUTE,
     O_ACUTE,
     U_ACUTE,
+    U_DIER,
+    A_TILDE,
+    E_TILDE,
+    I_TILDE,
+    O_TILDE,
+    U_TILDE,
     DEGREE,
     INV_EXCL,
     INV_QUES,
@@ -50,6 +56,12 @@ const uint16_t PROGMEM acute_e_combo[] = {KC_E, KC_J, COMBO_END};
 const uint16_t PROGMEM acute_i_combo[] = {KC_I, KC_F, COMBO_END};
 const uint16_t PROGMEM acute_o_combo[] = {KC_O, KC_F, COMBO_END};
 const uint16_t PROGMEM acute_u_combo[] = {KC_U, KC_F, COMBO_END};
+const uint16_t PROGMEM dier_u_combo[] = {KC_U, KC_R, COMBO_END};
+const uint16_t PROGMEM tilde_a_combo[] = {KC_A, KC_M, COMBO_END};
+const uint16_t PROGMEM tilde_e_combo[] = {KC_E, KC_M, COMBO_END};
+const uint16_t PROGMEM tilde_i_combo[] = {KC_I, KC_V, COMBO_END};
+const uint16_t PROGMEM tilde_o_combo[] = {KC_O, KC_V, COMBO_END};
+const uint16_t PROGMEM tilde_u_combo[] = {KC_U, KC_V, COMBO_END};
 
 combo_t key_combos[] = {
     COMBO(caps_combo, KC_CAPS),
@@ -66,6 +78,12 @@ combo_t key_combos[] = {
     COMBO(acute_i_combo, I_ACUTE),
     COMBO(acute_o_combo, O_ACUTE),
     COMBO(acute_u_combo, U_ACUTE),
+    COMBO(dier_u_combo, U_DIER),
+    COMBO(tilde_a_combo, A_TILDE),
+    COMBO(tilde_e_combo, E_TILDE),
+    COMBO(tilde_i_combo, I_TILDE),
+    COMBO(tilde_o_combo, O_TILDE),
+    COMBO(tilde_u_combo, U_TILDE),
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -83,6 +101,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             case I_ACUTE: send_unicode_string(uppercase ? "Í" : "í"); return false;
             case O_ACUTE: send_unicode_string(uppercase ? "Ó" : "ó"); return false;
             case U_ACUTE: send_unicode_string(uppercase ? "Ú" : "ú"); return false;
+            case U_DIER: send_unicode_string(uppercase ? "Ü" : "ü"); return false;
+            case A_TILDE: send_unicode_string(uppercase ? "Ã" : "ã"); return false;
+            case E_TILDE: send_unicode_string(uppercase ? "Ẽ" : "ẽ"); return false;
+            case I_TILDE: send_unicode_string(uppercase ? "Ĩ" : "ĩ"); return false;
+            case O_TILDE: send_unicode_string(uppercase ? "Õ" : "õ"); return false;
+            case U_TILDE: send_unicode_string(uppercase ? "Ũ" : "ũ"); return false;
             case DEGREE: send_unicode_string("º"); return false;
             case INV_EXCL: send_unicode_string("¡"); return false;
             case INV_QUES: send_unicode_string("¿"); return false;
