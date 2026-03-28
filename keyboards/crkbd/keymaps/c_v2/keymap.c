@@ -12,7 +12,6 @@ GNU General Public License for more details.
 */
 
 #include QMK_KEYBOARD_H
-#include "keymap_spanish.h"
 
 enum layers {
     _BASE = 0,
@@ -90,86 +89,35 @@ combo_t key_combos[] = {
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     // --- Spanish/unicode keys ---
-    // if (record->event.pressed) {
-    //     bool is_shift = keyboard_report->mods & MOD_MASK_SHIFT;
-    //     bool is_caps  = host_keyboard_led_state().caps_lock;
-    //     bool uppercase = is_shift ^ is_caps;
-    //
-    //     switch (keycode) {
-    //         case NTILDE: send_unicode_string(uppercase ? "Ñ" : "ñ"); return false;
-    //         case A_ACUTE: send_unicode_string(uppercase ? "Á" : "á"); return false;
-    //         case E_ACUTE: send_unicode_string(uppercase ? "É" : "é"); return false;
-    //         case I_ACUTE: send_unicode_string(uppercase ? "Í" : "í"); return false;
-    //         case O_ACUTE: send_unicode_string(uppercase ? "Ó" : "ó"); return false;
-    //         case U_ACUTE: send_unicode_string(uppercase ? "Ú" : "ú"); return false;
-    //         case U_DIER: send_unicode_string(uppercase ? "Ü" : "ü"); return false;
-    //         case A_TILDE: send_unicode_string(uppercase ? "Ã" : "ã"); return false;
-    //         case E_TILDE: send_unicode_string(uppercase ? "Ẽ" : "ẽ"); return false;
-    //         case I_TILDE: send_unicode_string(uppercase ? "Ĩ" : "ĩ"); return false;
-    //         case O_TILDE: send_unicode_string(uppercase ? "Õ" : "õ"); return false;
-    //         case U_TILDE: send_unicode_string(uppercase ? "Ũ" : "ũ"); return false;
-    //         case DEGREE: send_unicode_string("º"); return false;
-    //         case INV_EXCL: send_unicode_string("¡"); return false;
-    //         case INV_QUES: send_unicode_string("¿"); return false;
-    //     }
-    // }
-        if (record->event.pressed) {
+    if (record->event.pressed) {
+        bool is_shift = keyboard_report->mods & MOD_MASK_SHIFT;
+        bool is_caps  = host_keyboard_led_state().caps_lock;
+        bool uppercase = is_shift ^ is_caps;
 
-            switch (keycode) {
-
-                case NTILDE:
-                    tap_code16(ES_NTIL);
-                    return false;
-
-                case A_ACUTE:
-                    tap_code16(ES_ACUT);
-                    tap_code(KC_A);
-                    return false;
-
-                case E_ACUTE:
-                    tap_code16(ES_ACUT);
-                    tap_code(KC_E);
-                    return false;
-
-                case I_ACUTE:
-                    tap_code16(ES_ACUT);
-                    tap_code(KC_I);
-                    return false;
-
-                case O_ACUTE:
-                    tap_code16(ES_ACUT);
-                    tap_code(KC_O);
-                    return false;
-
-                case U_ACUTE:
-                    tap_code16(ES_ACUT);
-                    tap_code(KC_U);
-                    return false;
-
-                case U_DIER:
-                    tap_code16(ES_DIAE);
-                    tap_code(KC_U);
-                    return false;
-
-                case INV_EXCL:
-                    tap_code16(ES_IEXL);
-                    return false;
-
-                case INV_QUES:
-                    tap_code16(ES_IQUE);
-                    return false;
-
-                case DEGREE:
-                    tap_code16(ES_MORD);
-                    return false;
-            }
+        switch (keycode) {
+            case NTILDE: send_unicode_string(uppercase ? "Ñ" : "ñ"); return false;
+            case A_ACUTE: send_unicode_string(uppercase ? "Á" : "á"); return false;
+            case E_ACUTE: send_unicode_string(uppercase ? "É" : "é"); return false;
+            case I_ACUTE: send_unicode_string(uppercase ? "Í" : "í"); return false;
+            case O_ACUTE: send_unicode_string(uppercase ? "Ó" : "ó"); return false;
+            case U_ACUTE: send_unicode_string(uppercase ? "Ú" : "ú"); return false;
+            case U_DIER: send_unicode_string(uppercase ? "Ü" : "ü"); return false;
+            case A_TILDE: send_unicode_string(uppercase ? "Ã" : "ã"); return false;
+            case E_TILDE: send_unicode_string(uppercase ? "Ẽ" : "ẽ"); return false;
+            case I_TILDE: send_unicode_string(uppercase ? "Ĩ" : "ĩ"); return false;
+            case O_TILDE: send_unicode_string(uppercase ? "Õ" : "õ"); return false;
+            case U_TILDE: send_unicode_string(uppercase ? "Ũ" : "ũ"); return false;
+            case DEGREE: send_unicode_string("º"); return false;
+            case INV_EXCL: send_unicode_string("¡"); return false;
+            case INV_QUES: send_unicode_string("¿"); return false;
         }
+    }
 
     return true;
 }
 
 void keyboard_post_init_user(void) {
-    // unicode_config.input_mode = UNICODE_MODE_LINUX;
+    unicode_config.input_mode = UNICODE_MODE_LINUX;
     #ifdef RGB_MATRIX_ENABLE
     rgb_matrix_enable();
     rgb_matrix_mode(RGB_MATRIX_SOLID_COLOR);
@@ -355,4 +303,3 @@ bool oled_task_user(void) {
     }
 }
 #endif // OLED_ENABLE
-
