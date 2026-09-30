@@ -23,25 +23,21 @@ enum layers {
     _FUNCTION
 };
 
+// Spanish characters are sent as X11 Compose sequences, with KC_APP as Multi_key.
+// Host setup: setxkbmap us -option lv3:ralt_switch,compose:menu (and QT_IM_MODULE=compose for Qt apps)
 enum custom_keycodes {
-    NTILDE = SAFE_RANGE,
-    A_ACUTE,
-    E_ACUTE,
-    I_ACUTE,
-    O_ACUTE,
-    U_ACUTE,
-    U_DIER,
-    A_TILDE,
-    E_TILDE,
-    I_TILDE,
-    O_TILDE,
-    U_TILDE,
-    DEGREE,
+    DEGREE = SAFE_RANGE,
     INV_EXCL,
     INV_QUES,
+    ACCENT,
 };
 
-// Spanish/unicode combos
+// ACCENT arms an accent for the next key:
+// ACCENT + a/e/i/o/u = á é í ó ú, ACCENT + n = ñ, ACCENT + c = ç, ACCENT ACCENT + u = ü, ACCENT + ! / ? = ¡ ¿
+// Shift+ACCENT + a/o = ã õ, Shift+ACCENT Shift+ACCENT + a/e/o = â ê ô
+enum accent_state { ACC_NONE, ACC_ACUTE, ACC_DIAERESIS, ACC_TILDE, ACC_CIRCUMFLEX };
+static enum accent_state accent = ACC_NONE;
+
 const uint16_t PROGMEM caps_combo[] = {KC_J, KC_F, COMBO_END};
 const uint16_t PROGMEM esc_combo[] = {KC_J, KC_K, COMBO_END};
 const uint16_t PROGMEM tab_combo[] = {KC_D, KC_F, COMBO_END};
@@ -50,18 +46,6 @@ const uint16_t PROGMEM mouse_combo[] = {OSL(_NUMBERS), OSL(_SYMBOLS), COMBO_END}
 const uint16_t PROGMEM locknum_combo[] = {OSL(_NUMBERS), MT(MOD_LSFT, KC_SPC), COMBO_END};
 const uint16_t PROGMEM locksym_combo[] = {KC_ENT, OSL(_SYMBOLS), COMBO_END};
 const uint16_t PROGMEM function_combo[] = {MO(_MODIFIERS), MT(MOD_LSFT, KC_SPC), COMBO_END};
-const uint16_t PROGMEM ntilde_combo[] = {KC_N, KC_F, COMBO_END};
-const uint16_t PROGMEM acute_a_combo[] = {KC_A, KC_J, COMBO_END};
-const uint16_t PROGMEM acute_e_combo[] = {KC_E, KC_J, COMBO_END};
-const uint16_t PROGMEM acute_i_combo[] = {KC_I, KC_F, COMBO_END};
-const uint16_t PROGMEM acute_o_combo[] = {KC_O, KC_F, COMBO_END};
-const uint16_t PROGMEM acute_u_combo[] = {KC_U, KC_F, COMBO_END};
-const uint16_t PROGMEM dier_u_combo[] = {KC_U, KC_R, COMBO_END};
-const uint16_t PROGMEM tilde_a_combo[] = {KC_A, KC_M, COMBO_END};
-const uint16_t PROGMEM tilde_e_combo[] = {KC_E, KC_M, COMBO_END};
-const uint16_t PROGMEM tilde_i_combo[] = {KC_I, KC_V, COMBO_END};
-const uint16_t PROGMEM tilde_o_combo[] = {KC_O, KC_V, COMBO_END};
-const uint16_t PROGMEM tilde_u_combo[] = {KC_U, KC_V, COMBO_END};
 
 combo_t key_combos[] = {
     COMBO(caps_combo, KC_CAPS),
@@ -72,52 +56,79 @@ combo_t key_combos[] = {
     COMBO(locknum_combo, TO(_NUMBERS)),
     COMBO(locksym_combo, TO(_SYMBOLS)),
     COMBO(function_combo, MO(_FUNCTION)),
-    COMBO(ntilde_combo, NTILDE),
-    COMBO(acute_a_combo, A_ACUTE),
-    COMBO(acute_e_combo, E_ACUTE),
-    COMBO(acute_i_combo, I_ACUTE),
-    COMBO(acute_o_combo, O_ACUTE),
-    COMBO(acute_u_combo, U_ACUTE),
-    COMBO(dier_u_combo, U_DIER),
-    COMBO(tilde_a_combo, A_TILDE),
-    COMBO(tilde_e_combo, E_TILDE),
-    COMBO(tilde_i_combo, I_TILDE),
-    COMBO(tilde_o_combo, O_TILDE),
-    COMBO(tilde_u_combo, U_TILDE),
 };
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+// Send <Multi_key> a b [c]. Mods are cleared so a held shift can't alter the sequence;
+// shift is re-applied only to the last key. Caps Lock is handled by X itself.
+static void compose_tap(uint16_t a, uint16_t b, uint16_t c, bool shift_last) {
+    const uint8_t mods = get_mods();
+    const uint8_t osm  = get_oneshot_mods();
+    clear_mods();
+    clear_oneshot_mods();
+    send_keyboard_report();
 
-    // --- Spanish/unicode keys ---
-    if (record->event.pressed) {
-        bool is_shift = keyboard_report->mods & MOD_MASK_SHIFT;
-        bool is_caps  = host_keyboard_led_state().caps_lock;
-        bool uppercase = is_shift ^ is_caps;
-
-        switch (keycode) {
-            case NTILDE: send_unicode_string(uppercase ? "Ñ" : "ñ"); return false;
-            case A_ACUTE: send_unicode_string(uppercase ? "Á" : "á"); return false;
-            case E_ACUTE: send_unicode_string(uppercase ? "É" : "é"); return false;
-            case I_ACUTE: send_unicode_string(uppercase ? "Í" : "í"); return false;
-            case O_ACUTE: send_unicode_string(uppercase ? "Ó" : "ó"); return false;
-            case U_ACUTE: send_unicode_string(uppercase ? "Ú" : "ú"); return false;
-            case U_DIER: send_unicode_string(uppercase ? "Ü" : "ü"); return false;
-            case A_TILDE: send_unicode_string(uppercase ? "Ã" : "ã"); return false;
-            case E_TILDE: send_unicode_string(uppercase ? "Ẽ" : "ẽ"); return false;
-            case I_TILDE: send_unicode_string(uppercase ? "Ĩ" : "ĩ"); return false;
-            case O_TILDE: send_unicode_string(uppercase ? "Õ" : "õ"); return false;
-            case U_TILDE: send_unicode_string(uppercase ? "Ũ" : "ũ"); return false;
-            case DEGREE: send_unicode_string("º"); return false;
-            case INV_EXCL: send_unicode_string("¡"); return false;
-            case INV_QUES: send_unicode_string("¿"); return false;
-        }
+    tap_code(KC_APP);
+    tap_code16(a);
+    if (c == KC_NO) {
+        tap_code16(shift_last ? LSFT(b) : b);
+    } else {
+        tap_code16(b);
+        tap_code16(shift_last ? LSFT(c) : c);
     }
 
-    return true;
+    set_mods(mods);
+    set_oneshot_mods(osm);
+    send_keyboard_report();
+}
+
+// Keys that shouldn't consume a pending accent (shift held for a capital, layer switch for ! ?).
+static bool is_mod_or_layer_key(uint16_t keycode, keyrecord_t *record) {
+    if (IS_QK_MOD_TAP(keycode)) return record->tap.count == 0;
+    return IS_MODIFIER_KEYCODE(keycode) || IS_QK_ONE_SHOT_LAYER(keycode) || IS_QK_MOMENTARY(keycode) || IS_QK_TO(keycode);
+}
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (!record->event.pressed) return true;
+
+    switch (keycode) {
+        case ACCENT:
+            if ((get_mods() | get_oneshot_mods()) & MOD_MASK_SHIFT) {
+                accent = (accent == ACC_TILDE) ? ACC_CIRCUMFLEX : ACC_TILDE;
+            } else {
+                accent = (accent == ACC_ACUTE) ? ACC_DIAERESIS : ACC_ACUTE;
+            }
+            return false;
+        case DEGREE: compose_tap(KC_CIRC, KC_UNDS, KC_O, false); return false;
+        case INV_EXCL: compose_tap(KC_EXLM, KC_EXLM, KC_NO, false); return false;
+        case INV_QUES: compose_tap(KC_QUES, KC_QUES, KC_NO, false); return false;
+    }
+
+    if (accent == ACC_NONE || is_mod_or_layer_key(keycode, record)) return true;
+
+    const enum accent_state state = accent;
+    const bool shift = (get_mods() | get_oneshot_mods()) & MOD_MASK_SHIFT;
+    uint16_t mark;
+    switch (state) {
+        case ACC_DIAERESIS: mark = KC_DQUO; break;
+        case ACC_TILDE: mark = KC_TILD; break;
+        case ACC_CIRCUMFLEX: mark = KC_CIRC; break;
+        default: mark = KC_QUOT; break;
+    }
+    accent = ACC_NONE;
+
+    switch (keycode) {
+        case KC_A: case KC_E: case KC_I: case KC_O: case KC_U:
+            compose_tap(mark, keycode, KC_NO, shift);
+            return false;
+        case KC_N: compose_tap(KC_TILD, KC_N, KC_NO, shift); return false;
+        case KC_C: compose_tap(KC_COMM, KC_C, KC_NO, shift); return false;
+        case KC_EXLM: compose_tap(KC_EXLM, KC_EXLM, KC_NO, false); return false;
+        case KC_QUES: compose_tap(KC_QUES, KC_QUES, KC_NO, false); return false;
+    }
+    return true;  // any other key cancels the accent and types normally
 }
 
 void keyboard_post_init_user(void) {
-    unicode_config.input_mode = UNICODE_MODE_LINUX;
     #ifdef RGB_MATRIX_ENABLE
     rgb_matrix_enable();
     rgb_matrix_mode(RGB_MATRIX_SOLID_COLOR);
@@ -146,7 +157,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BASE] = LAYOUT_split_3x6_3(
         KC_TAB, KC_Q, KC_W, KC_E, KC_R, KC_T,                                KC_Y, KC_U, KC_I, KC_O, KC_P, KC_BSPC,
         KC_LALT, KC_A, KC_S, KC_D, KC_F, KC_G,                         KC_H, KC_J, KC_K, KC_L, KC_SCLN, KC_QUOT,
-        KC_LSFT, KC_Z, KC_X, KC_C, KC_V, KC_B,                         KC_N, KC_M, KC_COMM, KC_DOT, KC_SLSH, KC_LCTL,
+        ACCENT, KC_Z, KC_X, KC_C, KC_V, KC_B,                          KC_N, KC_M, KC_COMM, KC_DOT, KC_SLSH, ACCENT,
                               MO(_MODIFIERS), OSL(_NUMBERS), KC_ENT,    MT(MOD_LSFT, KC_SPC), OSL(_SYMBOLS), MO(_MODIFIERS)
     ),
     [_NUMBERS] = LAYOUT_split_3x6_3(
